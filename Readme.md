@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Красильников](https://up.htmlacademy.ru/javascript/18/user/984839).
-* Наставник: [Антон Попов](https://up.htmlacademy.ru/javascript/18/user/78239.
+* Наставник: [Антон Попов](https://up.htmlacademy.ru/javascript/18/user/78239).
 
 ---
 
