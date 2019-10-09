@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 
 var PHOTO_QTY = 25;
 var User = {
-  AVATAR: ["img/avatar-1.svg", "img/avatar-2.svg", "img/avatar-3.svg", "img/avatar-4.svg", "img/avatar-5.svg", "img/avatar-6.svg"],
-  MESSAGE: ["Всё отлично!", "В целом всё неплохо. Но не всё.", "Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.", "Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.", "Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.", "Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!"],
-  NAME: ["Кирилл", "Мефодий", "Илья", "Добрыня", "Алёша", "Улукбек"]
+  AVATAR: ['img/avatar-1.svg', 'img/avatar-2.svg', 'img/avatar-3.svg', 'img/avatar-4.svg', 'img/avatar-5.svg', 'img/avatar-6.svg'],
+  MESSAGE: ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'],
+  NAME: ['Кирилл', 'Мефодий', 'Илья', 'Добрыня', 'Алёша', 'Улукбек']
 };
 var Likes = {
   MIN: 15,
@@ -13,7 +13,7 @@ var Likes = {
 var Comments = {
   MIN: 0,
   MAX: 10
-}
+};
 
 /**
  * Возвращает случайное целое число в диапазоне от min (включительно) до max (включительно)
@@ -33,7 +33,7 @@ var getRandomIntInclusive = function (min, max) {
  */
 
 var getRandomElementOfArray = function (array) {
-  return array[Math.floor(Math.random() * array.length)]
+  return array[Math.floor(Math.random() * array.length)];
 };
 
 /**
@@ -51,7 +51,7 @@ var getArrayOfComments = function (quantityOfComments) {
       name: getRandomElementOfArray(User.NAME)
     });
   }
-  return(arrayOfComments);
+  return (arrayOfComments);
 };
 
 /**
@@ -64,13 +64,13 @@ var getPhotos = function (quantityOfPhotos) {
   var arrayOfPhotos = [];
   for (var i = 0; i < quantityOfPhotos; i++) {
     arrayOfPhotos.push({
-      url: "photos/" + (i + 1) + ".jpg",
-      description: "описание фотографии",
+      url: 'photos/' + (i + 1) + '.jpg',
+      description: 'описание фотографии',
       likes: getRandomIntInclusive(Likes.MIN, Likes.MAX),
       comments: getArrayOfComments(getRandomIntInclusive(Comments.MIN, Comments.MAX))
     });
   }
-  return(arrayOfPhotos);
+  return (arrayOfPhotos);
 };
 
 var pictureTemplate = document.querySelector('#picture')
