@@ -110,3 +110,30 @@ var createFragment = function (arrayOfObjects) {
 var photos = getPhotos(PHOTO_QTY);
 var picturesListElement = document.querySelector('.pictures');
 picturesListElement.appendChild(createFragment(photos));
+
+// При наступлении события chahge на элементе с id #upload-file показываем форму редактирования изображения, т.е. у блока с классом img-upload__overlay удаляем класс .hidden
+
+//Далее пишем обработчик на закрытие формы (вышеуказанному блоку добавляем класс hidden по клику на крестик мышкой либо клавишей Enter при фокусе на крестике, либо по нажатию на клавишу Esc), при это сбрасываем значение поля выбора файла (блок с id #upload-file)
+
+
+var fileUploadControl = document.querySelector('#upload-file');
+var editImageControl = document.querySelector('.img-upload__overlay');
+var closeButton = editImageControl.querySelector('.image-upload__cancel');
+
+var onPopupOpen = function () {
+  editImageControl.classList.remove('hidden');
+};
+
+var onPopupClose = function () {
+  editImageControl.classList.add('hidden');
+};
+
+fileUploadControl.addEventListener('change', function () {
+  onPopupOpen();
+});
+
+closeButton.addEventListener('click', function () {
+  onPopupClose();
+});
+
+
