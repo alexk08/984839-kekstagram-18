@@ -120,8 +120,11 @@ var fileUploadControl = document.querySelector('#upload-file');
 var editImageControl = document.querySelector('.img-upload__overlay');
 var closeButton = editImageControl.querySelector('.img-upload__cancel');
 
+var ESC_KEYCODE = 27;
+
 var onPopupEscPress = function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    evt.preventDefault();
     closePopup();
   }
 };
@@ -134,14 +137,117 @@ var openPopup = function () {
 var closePopup = function () {
   editImageControl.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
+  fileUploadControl.value = "";
 };
 
-fileUploadControl.addEventListener('change', function () {
+fileUploadControl.addEventListener('change', function (evt) {
+  evt.preventDefault();
   openPopup();
 });
 
-closeButton.addEventListener('click', function () {
+closeButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
   closePopup();
 });
 
+//При наступлении события "click" на кнопке c классом .scale__control--smaller должно изменяться значение поля input с классом .scale__control--value на длину шага, если текущее его значение больше минимального.
+
+//При наступлении события "click" на кнопке c классом .scale__control--bigger должно изменяться значение поля input с классом .scale__control--value на длину шага, если текущее его значение меньше максимального значения
+
+//Минимальное, максимальное значения, длину шага и значение .scale__control--value по умолчанию задаем через постоянные переменные.
+
+var scaleSmaller = document.querySelector('.scale__control--smaller');
+var scaleBigger = document.querySelector('.scale__control--bigger');
+var scaleControl = document.querySelector('.scale__control--value');
+var scaleValue = Number(scaleControl.value.slice(0, -1));
+var image = document.querySelector('.img-upload__preview').firstElementChild;
+
+var Scale = {
+  STEP: 25,
+  MIN: 25,
+  MAX: 100
+};
+
+var decreaseScale = function () {
+  if (scaleValue > Scale.MIN) {
+    scaleValue = scaleValue - Scale.STEP;
+    scaleControl.value = scaleValue + "%";
+    image.style.transform = "scale(" + scaleValue * 0.01 + ")";
+  }
+};
+
+var increaseScale = function () {
+  if (scaleValue < Scale.MAX) {
+    scaleValue = scaleValue + Scale.STEP;
+    scaleControl.value = scaleValue + "%";
+    image.style.transform = "scale(" + scaleValue * 0.01 + ")";
+  }
+};
+
+scaleSmaller.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  decreaseScale();
+});
+
+scaleBigger.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  increaseScale();
+});
+
+scaleControl.addEventListener('change', function () {
+  console.log(1);
+});
+
+// var scaleValue = Number(scaleControl.getAttribute("value").slice(0, -1));
+// scaleControl.setAttribute("value", (String(scaleValue) + "%"));
+// scaleControl.setAttribute("value", (String(scaleValue) + "%"));
+
+//При возникновении события change на scaleControl блок с изображением внутри блока с классом .img-upload__preview стилизуется свойством transform: scale(X). Где X значение scaleValue умноженное на 0,01.
+
+//При закрытии формы настройки фотографии, значение свойства transform у фото не сбрасывается. И при загрузке новой фотографии, масштба остается не по-умолчанию. Нужно подумать как устанавливать значение по-умолчанию при закрытии окна.
+
+//Не получается обрабать событие изменение значения input'а scaleControl
+
+var noneButton = document.querySelector('#effect-none');
+var chromeButton = document.querySelector('#effect-chrome');
+var sepiaButton = document.querySelector('#effect-sepia');
+var marvinButton = document.querySelector('#effect-marvin');
+var phobosButton = document.querySelector('#effect-phobos');
+var heatButton = document.querySelector('#effect-heat');
+var list = document.querySelector('.effects__list');
+
+// chromeButton.addEventListener('click', function(evt) {
+//   evt.preventDefault();
+//   image.classList.add('effects__preview--chrome');
+// });
+
+// sepiaButton.addEventListener('click', function(evt) {
+//   evt.preventDefault();
+//   image.classList.add('effects__preview--sepia');
+// });
+
+// marvinButton.addEventListener('click', function(evt) {
+//   evt.preventDefault();
+//   image.classList.add('effects__preview--marvin');
+// });
+
+// phobosButton.addEventListener('click', function(evt) {
+//   evt.preventDefault();
+//   image.classList.add('effects__preview--phobos');
+// });
+
+// heatButton.addEventListener('click', function(evt) {
+//   evt.preventDefault();
+//   image.classList.add('effects__preview--heat');
+// });
+//
+list.addEventListener('click', function(evt) {
+  // evt.preventDefault();
+  console.log(evt.target);
+  target =
+  if (evt.target.mathese("input")) {
+
+  }
+  // image.classList.add('effects__preview--chrome');
+});
 
