@@ -118,22 +118,30 @@ picturesListElement.appendChild(createFragment(photos));
 
 var fileUploadControl = document.querySelector('#upload-file');
 var editImageControl = document.querySelector('.img-upload__overlay');
-var closeButton = editImageControl.querySelector('.image-upload__cancel');
+var closeButton = editImageControl.querySelector('.img-upload__cancel');
 
-var onPopupOpen = function () {
-  editImageControl.classList.remove('hidden');
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === 27) {
+    closePopup();
+  }
 };
 
-var onPopupClose = function () {
+var openPopup = function () {
+  editImageControl.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
   editImageControl.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
 };
 
 fileUploadControl.addEventListener('change', function () {
-  onPopupOpen();
+  openPopup();
 });
 
 closeButton.addEventListener('click', function () {
-  onPopupClose();
+  closePopup();
 });
 
 
