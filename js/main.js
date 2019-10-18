@@ -208,46 +208,21 @@ scaleControl.addEventListener('change', function () {
 
 //Не получается обрабать событие изменение значения input'а scaleControl
 
-var noneButton = document.querySelector('#effect-none');
-var chromeButton = document.querySelector('#effect-chrome');
-var sepiaButton = document.querySelector('#effect-sepia');
-var marvinButton = document.querySelector('#effect-marvin');
-var phobosButton = document.querySelector('#effect-phobos');
-var heatButton = document.querySelector('#effect-heat');
 var list = document.querySelector('.effects__list');
 
-// chromeButton.addEventListener('click', function(evt) {
-//   evt.preventDefault();
-//   image.classList.add('effects__preview--chrome');
-// });
+var effectInputs = document.querySelectorAll('.effects__radio');
 
-// sepiaButton.addEventListener('click', function(evt) {
-//   evt.preventDefault();
-//   image.classList.add('effects__preview--sepia');
-// });
-
-// marvinButton.addEventListener('click', function(evt) {
-//   evt.preventDefault();
-//   image.classList.add('effects__preview--marvin');
-// });
-
-// phobosButton.addEventListener('click', function(evt) {
-//   evt.preventDefault();
-//   image.classList.add('effects__preview--phobos');
-// });
-
-// heatButton.addEventListener('click', function(evt) {
-//   evt.preventDefault();
-//   image.classList.add('effects__preview--heat');
-// });
-//
 list.addEventListener('click', function(evt) {
-  // evt.preventDefault();
-  console.log(evt.target);
-  target =
-  if (evt.target.mathese("input")) {
-
+  if (evt.target.matches("input")) {
+    var valueOfFilter = evt.target.value;
+    if (image.classList.length === 0) {
+      image.classList.add('effects__preview--' + valueOfFilter);
+    } else {
+      image.className = "";
+      image.classList.add('effects__preview--' + valueOfFilter);
+    }
   }
-  // image.classList.add('effects__preview--chrome');
 });
+
+
 
