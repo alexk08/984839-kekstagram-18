@@ -122,7 +122,7 @@ var closeButton = editImageControl.querySelector('.img-upload__cancel');
 
 var ESC_KEYCODE = 27;
 
-var onPopupEscPress = function (evt) {
+var escPressHandler = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     evt.preventDefault();
     closePopup();
@@ -131,22 +131,22 @@ var onPopupEscPress = function (evt) {
 
 var openPopup = function () {
   editImageControl.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
+  document.addEventListener('keydown', escPressHandler);
 };
 
 var closePopup = function () {
   editImageControl.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
+  document.removeEventListener('keydown', escPressHandler);
   fileUploadControl.value = "";
 };
 
 fileUploadControl.addEventListener('change', function (evt) {
-  evt.preventDefault();
+  // evt.preventDefault();
   openPopup();
 });
 
 closeButton.addEventListener('click', function (evt) {
-  evt.preventDefault();
+  // evt.preventDefault();
   closePopup();
 });
 
@@ -168,6 +168,9 @@ var Scale = {
   MAX: 100
 };
 
+/**
+ *
+ */
 var decreaseScale = function () {
   if (scaleValue > Scale.MIN) {
     scaleValue = scaleValue - Scale.STEP;
@@ -176,6 +179,9 @@ var decreaseScale = function () {
   }
 };
 
+/**
+ *
+ */
 var increaseScale = function () {
   if (scaleValue < Scale.MAX) {
     scaleValue = scaleValue + Scale.STEP;
@@ -185,12 +191,12 @@ var increaseScale = function () {
 };
 
 scaleSmaller.addEventListener('click', function (evt) {
-  evt.preventDefault();
+  // evt.preventDefault();
   decreaseScale();
 });
 
 scaleBigger.addEventListener('click', function (evt) {
-  evt.preventDefault();
+  // evt.preventDefault();
   increaseScale();
 });
 
@@ -204,25 +210,50 @@ scaleControl.addEventListener('change', function () {
 
 //При возникновении события change на scaleControl блок с изображением внутри блока с классом .img-upload__preview стилизуется свойством transform: scale(X). Где X значение scaleValue умноженное на 0,01.
 
-//При закрытии формы настройки фотографии, значение свойства transform у фото не сбрасывается. И при загрузке новой фотографии, масштба остается не по-умолчанию. Нужно подумать как устанавливать значение по-умолчанию при закрытии окна.
+//При закрытии формы настройки фотографии, значение свойства transform у фото не сбрасывается. И при загрузке новой фотографии, масштаб остается не по-умолчанию. Нужно подумать как устанавливать значение по-умолчанию при закрытии окна.
 
-//Не получается обрабать событие изменение значения input'а scaleControl
+//Не получается обрабать событие изменения значения (событие change не отлавливается) input'а scaleControl. И в разметке изменение value не отображается.
 
-var list = document.querySelector('.effects__list');
+var effects = document.querySelector('.effects');
 
-var effectInputs = document.querySelectorAll('.effects__radio');
-
-list.addEventListener('click', function(evt) {
-  if (evt.target.matches("input")) {
-    var valueOfFilter = evt.target.value;
+/**
+ * Функция обработчик события клика по input [type=radio] с делегированием на элемент fieldset. Результатом функцииявляется присвоение класса фотографии.
+ * Фунция обработчик события. Определяет эффект, накладываемый на изображение.
+ */
+var effectClickHandler = function (evt) {
+  // evt.preventDefault(); //где лучше писать отмену действия по умолчанию? при вызове метода addEventListner или в описании функции. короч вообще лучше почитать про отмену действия по умолчанию. здесь не работает потому что отменяется распространение? stoppropagation?
+  if (evt.target.matches(".effects__radio")) {
+    var effectName = evt.target.value; //хорошая ли это практика заводить переменную внитри условия? или можно просто в дальнейшем оперировать значением атрибута evt.target.value, без записи в переменную
     if (image.classList.length === 0) {
-      image.classList.add('effects__preview--' + valueOfFilter);
+      image.classList.add('effects__preview--' + effectName);
     } else {
       image.className = "";
-      image.classList.add('effects__preview--' + valueOfFilter);
+      image.classList.add('effects__preview--' + effectName);
     }
   }
+};
+
+effects.addEventListener('click', effectClickHandler);
+
+var uploadImageForm = document.querySelector('.img-upload__form');
+
+uploadImageForm.addEventListener('reset', function () {
+  image.removeAttribute('style');
+  image.removeAttribute('class');
 });
+
+/**
+ * функция рассчета уровня нассыщенности
+ */
+
+var levelPin = document.querySelector('.effect-level__pin');
+var levelLine = document.querySelector('.effect-level__line')
+
+var pinMouseUpHandler = function(evt) {
+  console.log((evt.clientX - levelLine.getBoundingClientRect().left) / levelLine.getBoundingClientRect().width);
+};
+
+levelPin.addEventListener('mouseup', pinMouseUpHandler);
 
 
 
