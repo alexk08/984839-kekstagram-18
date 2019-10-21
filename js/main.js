@@ -221,9 +221,8 @@ var effects = document.querySelector('.effects');
  * Фунция обработчик события. Определяет эффект, накладываемый на изображение.
  */
 var effectClickHandler = function (evt) {
-  // evt.preventDefault(); //где лучше писать отмену действия по умолчанию? при вызове метода addEventListner или в описании функции. короч вообще лучше почитать про отмену действия по умолчанию. здесь не работает потому что отменяется распространение? stoppropagation?
   if (evt.target.matches(".effects__radio")) {
-    var effectName = evt.target.value; //хорошая ли это практика заводить переменную внитри условия? или можно просто в дальнейшем оперировать значением атрибута evt.target.value, без записи в переменную
+    var effectName = evt.target.value;
     if (image.classList.length === 0) {
       image.classList.add('effects__preview--' + effectName);
     } else {
@@ -234,6 +233,9 @@ var effectClickHandler = function (evt) {
 };
 
 effects.addEventListener('click', effectClickHandler);
+
+//хорошая ли это практика заводить переменную внитри условия? или можно просто в дальнейшем оперировать значением атрибута evt.target.value, без записи в переменную
+// evt.preventDefault(); //где лучше писать отмену действия по умолчанию? при вызове метода addEventListner или в описании функции. короч вообще лучше почитать про отмену действия по умолчанию. здесь не работает потому что отменяется распространение? stoppropagation?
 
 var uploadImageForm = document.querySelector('.img-upload__form');
 
@@ -247,13 +249,45 @@ uploadImageForm.addEventListener('reset', function () {
  */
 
 var levelPin = document.querySelector('.effect-level__pin');
-var levelLine = document.querySelector('.effect-level__line')
+var levelLine = document.querySelector('.effect-level__line');
+var effectLevel = document.querySelector('.effect-level__value')
+
+
+//Для эффекта «Хром» — filter: grayscale(0..1);
+// Для эффекта «Сепия» — filter: sepia(0..1);
+// Для эффекта «Марвин» — filter: invert(0..100%);
+// Для эффекта «Фобос» — filter: blur(0..3px);
+// Для эффекта «Зной» — filter: brightness(1..3);
+// Для эффекта «Оригинал» CSS-стили filter удаляются.
 
 var pinMouseUpHandler = function(evt) {
-  console.log((evt.clientX - levelLine.getBoundingClientRect().left) / levelLine.getBoundingClientRect().width);
+  var coefficient = (evt.clientX - levelLine.getBoundingClientRect().left) / levelLine.getBoundingClientRect().width;
+  effectLevel.setAttribute("value", coefficient * 100);
+  if (image.className === "effects__preview--chrome") {
+    image.style.filter = "grayscale(" + coefficient + ")";
+  }
+
+  if (image.className === "effects__preview--sepia") {
+    image.style.filter = "sepia(" + coefficient + ")";
+  }
+
+  if (image.className === "effects__preview--marvin") {
+    image.style.filter = "invert(" + (coefficient * 100)+ "%)";
+  }
+
+  if (image.className === "effects__preview--phobos") {
+    image.style.filter = "blur(" + (coefficient * (3 - 0) + 0) + "px)";
+  }
+
+  if (image.className === "effects__preview--heat") {
+    image.style.filter = "brightness(" + (coefficient * (3 - 1) + 1) + ")";
+  }
+
+  if (image.className === "effects__preview--none") {
+    image.style.filter = " ";
+  }
 };
 
 levelPin.addEventListener('mouseup', pinMouseUpHandler);
-
 
 
