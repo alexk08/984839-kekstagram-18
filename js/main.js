@@ -317,7 +317,7 @@ var filters = [
 ];
 
 /**
- * функция обработчик события отпускание клавиши мышки: рассчет уровня нассыщенности по положению ползунка
+ * функция обработчик события отпускание клавиши мышки: рассчет уровня насыщенности по положению ползунка
  */
 
 var pinMouseUpHandler = function (evt) {
@@ -333,3 +333,13 @@ var pinMouseUpHandler = function (evt) {
 levelPin.addEventListener('mouseup', pinMouseUpHandler);
 
 
+/**
+ * валидация хэштегов
+ */
+
+ var submitButton = document.querySelector('.img-upload__submit');
+ var hashtagsField = document.querySelector('.text__hashtags');
+
+ submitButton.addEventListener('click', function () {
+  console.log(hashtagsField.value);
+ });
