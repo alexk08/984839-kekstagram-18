@@ -337,9 +337,21 @@ levelPin.addEventListener('mouseup', pinMouseUpHandler);
  * валидация хэштегов
  */
 
- var submitButton = document.querySelector('.img-upload__submit');
- var hashtagsField = document.querySelector('.text__hashtags');
+var hashtagsInput = document.querySelector('.text__hashtags');
 
- submitButton.addEventListener('click', function () {
-  console.log(hashtagsField.value);
- });
+hashtagsInput.addEventListener('change', function () {
+
+  var hashtags = hashtagsInput.value.split(' ');
+  var message = '';
+
+  if (hashtags.length > 5) {
+    message = 'Количество хэш-тегов должно быть не больше 5';
+  }
+  console.log(hashtags);
+  console.log(hashtagsInput.value);
+
+  if (message !== '') {
+    hashtagsInput.setCustomValidity(message);
+  }
+  console.log(message);
+});
