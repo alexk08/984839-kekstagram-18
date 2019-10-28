@@ -119,8 +119,8 @@
     var pinMouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shiftX = startCoordsX - evt.clientX;
-      startCoordsX = evt.clientX;
+      var shiftX = startCoordsX - moveEvt.clientX;
+      startCoordsX = moveEvt.clientX;
       levelPin.style.left = (levelPin.offsetLeft - shiftX) / levelLine.getBoundingClientRect().width * 100 + '%';
       levelDepth.style.width = levelPin.style.left;
       if (levelPin.style.left.slice(0, -1) > 100) {
