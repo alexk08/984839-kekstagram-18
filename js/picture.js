@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var PHOTO_QTY = 25;
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
@@ -10,7 +9,7 @@
    * @param {Object} photo -  объект с данными о фото
    * @return {any} DOM-элемент
    */
-  var renderPicture = function (photo) {
+  var generatePicture = function (photo) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
     pictureElement.querySelector('.picture__img').src = photo.url;
@@ -20,19 +19,44 @@
     return pictureElement;
   };
 
+  var picturesListElement = document.querySelector('.pictures');
+
   /**
-   * Функция заполнения фрагмента DOM-элементами на основе массива JS-объектов
-   * @param {Array} arrayOfObjects - массив JS-объектов с данными
-   * @return {DocumentFragment} фрагмент с DOM-элементами
+   * Функция заполнения списка фотографий DOM-элементами на основе массива данных
+   * @param {Array} photos - массив JS-объектов с данными
    */
-  var createFragment = function (arrayOfObjects) {
+  var fillPictureList = function (photos) {
     var fragment = document.createDocumentFragment();
-    arrayOfObjects.forEach(function (photo) {
-      fragment.appendChild(renderPicture(photo));
+
+    photos.forEach(function (elementOfPhotos) {
+      fragment.appendChild(generatePicture(elementOfPhotos));
     });
-    return fragment;
+    picturesListElement.appendChild(fragment);
   };
 
-  var picturesListElement = document.querySelector('.pictures');
-  picturesListElement.appendChild(createFragment(window.data.getPhotos(PHOTO_QTY)));
+  var errorTemplate = document.querySelector('#error')
+    .content
+    .firstElementChild;
+  var mainElement = document.querySelector('main');
+
+  /**
+   * Функция вывода сообщения об ошибке загрузки файлов
+   */
+  var errorHandler = function () {
+    var errorElement = errorTemplate.cloneNode(true);
+    mainElement.appendChild(errorElement);
+
+    var closeErrorMessageHandler = function (evt) {
+      if (window.utils.isEscPressed(evt) || evt.type === 'click') {
+        errorElement.remove();
+        document.removeEventListener('keydown', closeErrorMessageHandler);
+        document.removeEventListener('click', closeErrorMessageHandler);
+      }
+    };
+
+    document.addEventListener('keydown', closeErrorMessageHandler);
+    document.addEventListener('click', closeErrorMessageHandler);
+  };
+
+  window.loadData(fillPictureList, errorHandler);
 })();
