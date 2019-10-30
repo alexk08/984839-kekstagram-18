@@ -25,13 +25,15 @@
    * Функция заполнения списка фотографий DOM-элементами на основе массива данных
    * @param {Array} photos - массив JS-объектов с данными
    */
-  var fillPictureList = function (photos) {
+  window.fillPictureList = function (photos) {
     var fragment = document.createDocumentFragment();
 
     photos.forEach(function (elementOfPhotos) {
       fragment.appendChild(generatePicture(elementOfPhotos));
     });
     picturesListElement.appendChild(fragment);
+
+    window.arrayOfPhotos = photos;
   };
 
   var errorTemplate = document.querySelector('#error')
