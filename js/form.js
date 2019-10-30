@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-
   var fileUploadControl = document.querySelector('#upload-file');
   var editImageControl = document.querySelector('.img-upload__overlay');
   var closeButton = editImageControl.querySelector('.img-upload__cancel');
@@ -14,7 +12,7 @@
 
 
   var escPressHandler = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE && !evt.target.classList.contains('text__hashtags')) {
+    if (window.utils.isEscPressed(evt) && !evt.target.classList.contains('text__hashtags')) {
       evt.preventDefault();
       uploadImageForm.reset();
       window.form.image.removeAttribute('style');
