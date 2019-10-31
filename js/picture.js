@@ -25,15 +25,14 @@
    * Функция заполнения списка фотографий DOM-элементами на основе массива данных
    * @param {Array} photos - массив JS-объектов с данными
    */
-  window.fillPictureList = function (photos) {
+  // window.fillPictureList = function (photos) {
+  varfillPictureList = function (photos) {
     var fragment = document.createDocumentFragment();
 
     photos.forEach(function (elementOfPhotos) {
       fragment.appendChild(generatePicture(elementOfPhotos));
     });
     picturesListElement.appendChild(fragment);
-
-    window.arrayOfPhotos = photos;
   };
 
   var errorTemplate = document.querySelector('#error')
@@ -60,5 +59,12 @@
     document.addEventListener('click', closeErrorMessageHandler);
   };
 
-  window.loadData(fillPictureList, errorHandler);
+  var filters = function (photos) {
+    var imageFilters = document.querySelector('.img-filters');
+    imageFilters.classList.remove('img-filters--inactive');
+    window.arrayOfPhotos = photos;
+    console.log('пробросила');
+  }
+
+  window.loadData(fillPictureList, errorHandler, filters);
 })();
