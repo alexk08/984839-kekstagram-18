@@ -6,17 +6,17 @@
   var randomPhotosButton = document.querySelector('#filter-random');
 
   var renewElements = function (pictures, button) {
-    var activeButton = document.querySelector('.img-filters__button--active');
-    var pictureElements = document.querySelector('.pictures').querySelectorAll('.picture');
-    pictureElements.forEach(function (element) {
-      element.remove();
-    });
     var renderPhotos = function () {
+      var pictureElements = document.querySelector('.pictures').querySelectorAll('.picture');
+      pictureElements.forEach(function (element) {
+        element.remove();
+      });
       window.picturesList.render(pictures);
     };
-    window.utils.debounce(renderPhotos);
+    var activeButton = document.querySelector('.img-filters__button--active');
     activeButton.classList.remove('img-filters__button--active');
     button.classList.add('img-filters__button--active');
+    window.utils.debounce(renderPhotos);
   };
 
   var clickPopularFilterHandler = function () {
