@@ -10,7 +10,10 @@
     effectLevelField: document.querySelector('.effect-level')
   };
 
-
+  /**
+   * Обработчик нажатия клавиши Esc
+   * @param {Object} evt - объект события
+   */
   var escPressHandler = function (evt) {
     if (window.utils.isEscPressed(evt) && !evt.target.classList.contains('text__hashtags')) {
       evt.preventDefault();

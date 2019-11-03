@@ -12,38 +12,23 @@
   var hashtagsInput = document.querySelector('.text__hashtags');
 
   var checkMaxQuantityOfHashtags = function (quantityOfHashtags) {
-    if (quantityOfHashtags > Hashtag.MAX_QTY) {
-      var result = true;
-    }
-    return result;
+    return (quantityOfHashtags > Hashtag.MAX_QTY);
   };
 
   var checkForFirstSymbol = function (tag) {
-    if (tag[0] !== Hashtag.FIRST_SYMBOL) {
-      var result = true;
-    }
-    return result;
+    return (tag[0] !== Hashtag.FIRST_SYMBOL);
   };
 
   var checkForMinLength = function (tag) {
-    if (tag.length < Hashtag.MIN_LENGTH) {
-      var result = true;
-    }
-    return result;
+    return (tag.length < Hashtag.MIN_LENGTH);
   };
 
   var checkForMaxLength = function (tag) {
-    if (tag.length > Hashtag.MAX_LENGTH) {
-      var result = true;
-    }
-    return result;
+    return (tag.length > Hashtag.MAX_LENGTH);
   };
 
   var checkSeparationOfHashtags = function (tag) {
-    if (tag.indexOf(Hashtag.FIRST_SYMBOL, Hashtag.FROM) >= Hashtag.BAR_MAX_QTY) {
-      var result = true;
-    }
-    return result;
+    return (tag.indexOf(Hashtag.FIRST_SYMBOL, Hashtag.FROM) >= Hashtag.BAR_MAX_QTY);
   };
 
   var checkDuplicateOfHashtags = function (tag, arrayOfTags, indexOfArray) {
