@@ -6,9 +6,9 @@
   var randomPhotosButton = document.querySelector('#filter-random');
 
   /**
-   *
-   * @param {Array} pictures
-   * @param {any} button
+   * Функция обновления отрисовки списка фотографии на странице
+   * @param {Array} pictures - массив объектов с данными о картинке/фотографии
+   * @param {any} button - DOM-элемент кнопки фильтра
    */
   var renewElements = function (pictures, button) {
     var renderPhotos = function () {
