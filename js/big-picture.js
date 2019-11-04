@@ -3,7 +3,7 @@
 (function () {
   window.bigPicture = {
     render: function (photo) {
-      var bigPictureOverlay = document.querySelector('.big-picture');
+      window.bigPictureOverlay = document.querySelector('.big-picture');
 
       bigPictureOverlay.classList.remove('hidden');
       bigPictureOverlay.querySelector('.big-picture__img').firstElementChild.src = photo.url;
@@ -71,6 +71,47 @@
 
 // временное использование метода window.bigPicture.render для проверки его работоспособности
 // В следующем задании сделаю нормальный обработчик, буду вызывать этот метод по нажатию на миниатюрную фото из списка
-window.setTimeout(function () {
-  window.bigPicture.render(window.photos[0]);
-}, 3000);
+// window.setTimeout(function () {
+//   window.bigPicture.render(window.photos[0]);
+// }, 3000);
+
+(function () {
+  console.log(picture);
+
+/*  window.setTimeout(function () {
+    var pictures = document.querySelectorAll('.picture');
+    console.log(pictures);
+    pictures.forEach(function (picture) {
+      console.log(picture);
+      picture.addEventListener('click', function (evt) {
+        window.bigPicture.render(window.photos[0]);
+        console.log(evt.target);
+      });
+    });
+  }, 3000); */
+
+  var clickMiniPictureHandler = function (evt) {
+    if (evt.target.classList.contains('picture__img')) {
+      evt.preventDefault();
+      window.photos.forEach(function (photo) {
+        if (evt.target.getAttribute('src') === photo.url) {
+          window.bigPicture.render(photo);
+        }
+      });
+    } else if (evt.target.classList.contains('picture')) {
+      evt.preventDefault();
+      window.photos.forEach(function (photo) {
+        if (evt.target.firstElementChild.getAttribute('src') === photo.url) {
+          window.bigPicture.render(photo);
+        }
+      });
+    }
+
+    var bigPictureCloseButton = window.bigPictureOverlay.querySelector('.cancel');
+    bigPictureCloseButton.addEventListener('click', function () {
+      bigPictureOverlay.classList.add('hidden');
+    });
+  };
+
+  document.addEventListener('click', clickMiniPictureHandler);
+})();
