@@ -3,36 +3,14 @@
 (function () {
   window.bigPicture = {
     render: function (photo) {
-      window.bigPictureOverlay = document.querySelector('.big-picture');
-
       bigPictureOverlay.classList.remove('hidden');
       bigPictureOverlay.querySelector('.big-picture__img').firstElementChild.src = photo.url;
       bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
       bigPictureOverlay.querySelector('.comments-count').textContent = photo.comments.length;
 
-      // ищу список комментариев
       var commentsList = bigPictureOverlay.querySelector('.social__comments');
-
-      // ищу все комментарии, в разметке их больше одного. Более лучшей реализацией был бы шаблон (наверное).
-      // Сохраняю коллекцию в переменную
-      // var comments = bigPictureOverlay.querySelectorAll('.social__comment');
-
-      // Сохраняю для дальнейшей работы один комментарий.
-      // var comment = comments[0];
-
-      // Удаляю существующие на данный момент комментарии из разметки
-      // comments.forEach(function (element) {
-      // element.remove();
-      // });
-
-      // другой вариант сохранения одного комментария для дальнейшего клонирования и очистки списка комментариев
       var comment = bigPictureOverlay.querySelector('.social__comment');
 
-      // while (commentsList.firstChild) {
-      //   commentsList.removeChild(commentsList.firstChild);
-      // };
-
-      // какой из методов по очистке списка лучше?
       commentsList.innerHTML = '';
 
       /**
@@ -67,51 +45,56 @@
       bigPictureOverlay.querySelector('.comments-loader').classList.add('visually-hidden');
     }
   };
-})();
 
-// временное использование метода window.bigPicture.render для проверки его работоспособности
-// В следующем задании сделаю нормальный обработчик, буду вызывать этот метод по нажатию на миниатюрную фото из списка
-// window.setTimeout(function () {
-//   window.bigPicture.render(window.photos[0]);
-// }, 3000);
+  var bigPictureOverlay = document.querySelector('.big-picture');
+  var bigPictureCloseButton = bigPictureOverlay.querySelector('.cancel');
 
-(function () {
-  console.log(picture);
-
-/*  window.setTimeout(function () {
-    var pictures = document.querySelectorAll('.picture');
-    console.log(pictures);
-    pictures.forEach(function (picture) {
-      console.log(picture);
-      picture.addEventListener('click', function (evt) {
-        window.bigPicture.render(window.photos[0]);
-        console.log(evt.target);
-      });
-    });
-  }, 3000); */
-
-  var clickMiniPictureHandler = function (evt) {
-    if (evt.target.classList.contains('picture__img')) {
-      evt.preventDefault();
-      window.photos.forEach(function (photo) {
-        if (evt.target.getAttribute('src') === photo.url) {
-          window.bigPicture.render(photo);
-        }
-      });
-    } else if (evt.target.classList.contains('picture')) {
-      evt.preventDefault();
-      window.photos.forEach(function (photo) {
-        if (evt.target.firstElementChild.getAttribute('src') === photo.url) {
-          window.bigPicture.render(photo);
-        }
-      });
-    }
-
-    var bigPictureCloseButton = window.bigPictureOverlay.querySelector('.cancel');
-    bigPictureCloseButton.addEventListener('click', function () {
-      bigPictureOverlay.classList.add('hidden');
+  // ВОПРОС: что делать при нажатии на <p class="picture__info">, <span class="picture__comments">8</span>, <span class="picture__likes">28</span> ?
+  var renderBigPictureWithThisSrc = function (src, evt) {
+    evt.preventDefault();
+    document.addEventListener('keydown', escPressHandler);
+    document.removeEventListener('keydown', enterPressHandler);
+    window.photos.forEach(function (photo) {
+      if (src === photo.url) {
+        window.bigPicture.render(photo);
+      }
     });
   };
 
-  document.addEventListener('click', clickMiniPictureHandler);
+  var openBigPictureOverlay = function (evt) {
+    if (evt.target.classList.contains('picture__img')) {
+      renderBigPictureWithThisSrc(evt.target.getAttribute('src'), evt);
+    } else if (evt.target.classList.contains('picture')) {
+      renderBigPictureWithThisSrc(evt.target.firstElementChild.getAttribute('src'), evt);
+    }
+  };
+
+  var closeBigPictureOverlay = function () {
+    bigPictureOverlay.classList.add('hidden');
+    document.removeEventListener('keydown', escPressHandler);
+  };
+
+  var escPressHandler = function (evt) {
+    if (window.utils.isEscPressed(evt)) {
+      evt.preventDefault();
+      closeBigPictureOverlay();
+    }
+  };
+
+  var enterPressHandler = function (evt) {
+    if (window.utils.isEnterPressed(evt)) {
+      evt.preventDefault();
+      openBigPictureOverlay(evt);
+    }
+  };
+
+  document.addEventListener('click', function (evt) {
+    openBigPictureOverlay(evt);
+  });
+
+  bigPictureCloseButton.addEventListener('click', function () {
+    closeBigPictureOverlay();
+  });
+
+  document.addEventListener('keydown', enterPressHandler);
 })();

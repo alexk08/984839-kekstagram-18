@@ -15,7 +15,7 @@
    * @param {Object} evt - объект события
    */
   var escPressHandler = function (evt) {
-    if (window.utils.isEscPressed(evt) && !evt.target.classList.contains('text__hashtags')) {
+    if (window.utils.isEscPressed(evt) && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
       evt.preventDefault();
       uploadImageForm.reset();
       window.form.image.removeAttribute('style');

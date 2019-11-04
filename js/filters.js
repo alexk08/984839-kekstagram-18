@@ -52,4 +52,22 @@
   popularPhotosButton.addEventListener('mousedown', clickPopularFilterHandler);
   randomPhotosButton.addEventListener('mousedown', clickRandomFilterHandler);
   discussedPhotosButton.addEventListener('mousedown', clickDiscussedFilterHandler);
+
+  // Прошу проверить код ниже: доступность фильтров
+  var pressKeyEnterOnFilter = function (evt, filterHandler) {
+    if (window.utils.isEnterPressed(evt)) {
+      evt.preventDefault();
+      filterHandler();
+    }
+  };
+
+  popularPhotosButton.addEventListener('keydown', function (evt) {
+    pressKeyEnterOnFilter(evt, clickPopularFilterHandler);
+  });
+  randomPhotosButton.addEventListener('keydown', function (evt) {
+    pressKeyEnterOnFilter(evt, clickRandomFilterHandler);
+  });
+  discussedPhotosButton.addEventListener('keydown', function (evt) {
+    pressKeyEnterOnFilter(evt, clickDiscussedFilterHandler);
+  });
 })();
