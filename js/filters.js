@@ -27,14 +27,14 @@
   /**
    * Обработчик нажатия кнопки фильтра "Популярные"
    */
-  var clickPopularFilterHandler = function () {
+  var popularFilterClickHandler = function () {
     renewElements(window.photos, popularPhotosButton);
   };
 
   /**
    * Обработчик нажатия кнопки фильтра "Случайные"
    */
-  var clickRandomFilterHandler = function () {
+  var randomFilterClickHandler = function () {
     var randomPhotos = window.utils.shuffleArray(window.photos).slice(0, 10);
     renewElements(randomPhotos, randomPhotosButton);
   };
@@ -42,32 +42,32 @@
   /**
    * Обработчик нажатия кнопки фильтра "Обсуждаемые"
    */
-  var clickDiscussedFilterHandler = function () {
+  var discussedFilterClickHandler = function () {
     var sortPhotos = window.photos.slice().sort(function (a, b) {
       return (b.comments.length - a.comments.length);
     });
     renewElements(sortPhotos, discussedPhotosButton);
   };
 
-  popularPhotosButton.addEventListener('mousedown', clickPopularFilterHandler);
-  randomPhotosButton.addEventListener('mousedown', clickRandomFilterHandler);
-  discussedPhotosButton.addEventListener('mousedown', clickDiscussedFilterHandler);
+  popularPhotosButton.addEventListener('mousedown', popularFilterClickHandler);
+  randomPhotosButton.addEventListener('mousedown', randomFilterClickHandler);
+  discussedPhotosButton.addEventListener('mousedown', discussedFilterClickHandler);
 
   // Прошу проверить код ниже: доступность фильтров
-  var pressKeyEnterOnFilter = function (evt, filterHandler) {
+  var filterPictures = function (evt, handler) {
     if (window.utils.isEnterPressed(evt)) {
       evt.preventDefault();
-      filterHandler();
+      handler();
     }
   };
 
   popularPhotosButton.addEventListener('keydown', function (evt) {
-    pressKeyEnterOnFilter(evt, clickPopularFilterHandler);
+    filterPictures(evt, popularFilterClickHandler);
   });
   randomPhotosButton.addEventListener('keydown', function (evt) {
-    pressKeyEnterOnFilter(evt, clickRandomFilterHandler);
+    filterPictures(evt, randomFilterClickHandler);
   });
   discussedPhotosButton.addEventListener('keydown', function (evt) {
-    pressKeyEnterOnFilter(evt, clickDiscussedFilterHandler);
+    filterPictures(evt, discussedFilterClickHandler);
   });
 })();

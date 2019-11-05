@@ -11,10 +11,10 @@
   };
 
   /**
-   * Обработчик нажатия клавиши Esc
+   * Обработчик нажатия клавиши.
    * @param {Object} evt - объект события
    */
-  var escPressHandler = function (evt) {
+  var documentKeydownHandler = function (evt) {
     if (window.utils.isEscPressed(evt) && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
       evt.preventDefault();
       uploadImageForm.reset();
@@ -26,13 +26,13 @@
 
   var openPopup = function () {
     editImageControl.classList.remove('hidden');
-    document.addEventListener('keydown', escPressHandler);
+    document.addEventListener('keydown', documentKeydownHandler);
     window.form.effectLevelField.classList.add('hidden');
   };
 
   var closePopup = function () {
     editImageControl.classList.add('hidden');
-    document.removeEventListener('keydown', escPressHandler);
+    document.removeEventListener('keydown', documentKeydownHandler);
     fileUploadControl.value = '';
   };
 
@@ -47,5 +47,12 @@
   uploadImageForm.addEventListener('reset', function () {
     window.form.image.removeAttribute('style');
     window.form.image.removeAttribute('class');
+  });
+
+  // доступность открытия input #upload-file с клавиатуры
+  fileUploadControl.addEventListener('keydown', function (evt) {
+    if (window.utils.isEnterPressed(evt)) {
+      openPopup();
+    }
   });
 })();

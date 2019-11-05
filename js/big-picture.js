@@ -52,8 +52,8 @@
   // ВОПРОС: что делать при нажатии на <p class="picture__info">, <span class="picture__comments">8</span>, <span class="picture__likes">28</span> ?
   var renderBigPictureWithThisSrc = function (src, evt) {
     evt.preventDefault();
-    document.addEventListener('keydown', escPressHandler);
-    document.removeEventListener('keydown', enterPressHandler);
+    document.addEventListener('keydown', documentKeydownEscHandler);
+    document.removeEventListener('keydown', documentKeydownEnterHandler);
     window.photos.forEach(function (photo) {
       if (src === photo.url) {
         window.bigPicture.render(photo);
@@ -71,17 +71,17 @@
 
   var closeBigPictureOverlay = function () {
     bigPictureOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', escPressHandler);
+    document.removeEventListener('keydown', documentKeydownEscHandler);
   };
 
-  var escPressHandler = function (evt) {
+  var documentKeydownEscHandler = function (evt) {
     if (window.utils.isEscPressed(evt)) {
       evt.preventDefault();
       closeBigPictureOverlay();
     }
   };
 
-  var enterPressHandler = function (evt) {
+  var documentKeydownEnterHandler = function (evt) {
     if (window.utils.isEnterPressed(evt)) {
       evt.preventDefault();
       openBigPictureOverlay(evt);
@@ -96,5 +96,5 @@
     closeBigPictureOverlay();
   });
 
-  document.addEventListener('keydown', enterPressHandler);
+  document.addEventListener('keydown', documentKeydownEnterHandler);
 })();
