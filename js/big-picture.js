@@ -4,7 +4,7 @@
   window.bigPicture = {
     render: function (photo) {
       bigPictureOverlay.classList.remove('hidden');
-      bigPictureOverlay.querySelector('.big-picture__img').firstElementChild.src = photo.url;
+      bigPictureOverlay.querySelector('.big-picture__img').querySelector('img').src = photo.url;
       bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
       bigPictureOverlay.querySelector('.comments-count').textContent = photo.comments.length;
 
@@ -20,8 +20,8 @@
        */
       var generateComment = function (commentFromLoadData) {
         var commentElement = comment.cloneNode(true);
-        commentElement.firstElementChild.src = commentFromLoadData.avatar;
-        commentElement.firstElementChild.alt = commentFromLoadData.name;
+        commentElement.querySelector('img').src = commentFromLoadData.avatar;
+        commentElement.querySelector('img').alt = commentFromLoadData.name;
         commentElement.querySelector('.social__text').textContent = commentFromLoadData.message;
         return commentElement;
       };
@@ -65,7 +65,7 @@
     if (evt.target.classList.contains('picture__img')) {
       renderBigPictureWithThisSrc(evt.target.getAttribute('src'), evt);
     } else if (evt.target.classList.contains('picture')) {
-      renderBigPictureWithThisSrc(evt.target.firstElementChild.getAttribute('src'), evt);
+      renderBigPictureWithThisSrc(evt.target.querySelector('img').getAttribute('src'), evt);
     }
   };
 

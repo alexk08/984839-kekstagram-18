@@ -6,7 +6,7 @@
   var closeButton = editImageControl.querySelector('.img-upload__cancel');
   var uploadImageForm = document.querySelector('.img-upload__form');
   window.form = {
-    image: document.querySelector('.img-upload__preview').firstElementChild,
+    image: document.querySelector('.img-upload__preview').querySelector('img'),
     effectLevelField: document.querySelector('.effect-level')
   };
 

@@ -3,7 +3,7 @@
 (function () {
   var errorTemplate = document.querySelector('#error')
     .content
-    .firstElementChild;
+    .querySelector('.error');
   var mainElement = document.querySelector('main');
 
   /**
