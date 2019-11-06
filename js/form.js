@@ -48,10 +48,4 @@
     window.form.image.removeAttribute('style');
     window.form.image.removeAttribute('class');
   });
-
-  fileUploadControl.addEventListener('keydown', function (evt) {
-    if (window.utils.isEnterPressed(evt)) {
-      openPopup();
-    }
-  });
 })();
