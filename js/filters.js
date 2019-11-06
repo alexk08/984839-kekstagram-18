@@ -1,73 +1,56 @@
 'use strict';
 
 (function () {
-  var discussedPhotosButton = document.querySelector('#filter-discussed');
-  var popularPhotosButton = document.querySelector('#filter-popular');
-  var randomPhotosButton = document.querySelector('#filter-random');
+  var filtersForm = document.querySelector('.img-filters__form');
 
   /**
    * Функция обновления отрисовки списка фотографии на странице
-   * @param {Array} pictures - массив объектов с данными о картинке/фотографии
-   * @param {any} button - DOM-элемент кнопки фильтра
+   * @param {Array} photos - массив объектов с данными о картинке/фотографии
+   * @param {Object} evt - объект события
    */
-  var renewElements = function (pictures, button) {
-    var renderPhotos = function () {
+  var renderPhotos = function (photos, evt) {
+    var renewPictureList = function () {
       var pictureElements = document.querySelector('.pictures').querySelectorAll('.picture');
       pictureElements.forEach(function (element) {
         element.remove();
       });
-      window.picturesList.render(pictures);
+      window.picturesList.render(photos);
     };
     var activeButton = document.querySelector('.img-filters__button--active');
     activeButton.classList.remove('img-filters__button--active');
-    button.classList.add('img-filters__button--active');
-    window.utils.debounce(renderPhotos);
+    evt.target.classList.add('img-filters__button--active');
+    window.utils.debounce(renewPictureList);
   };
 
   /**
-   * Обработчик нажатия кнопки фильтра "Популярные"
+   * Фильтрация по кнопке "Случайные"
+   * @return {Array} - массив случайных фото
    */
-  var popularFilterClickHandler = function () {
-    renewElements(window.photos, popularPhotosButton);
-  };
-
-  /**
-   * Обработчик нажатия кнопки фильтра "Случайные"
-   */
-  var randomFilterClickHandler = function () {
+  var filterByRandom = function () {
     var randomPhotos = window.utils.shuffleArray(window.photos).slice(0, 10);
-    renewElements(randomPhotos, randomPhotosButton);
+    return randomPhotos;
   };
 
   /**
-   * Обработчик нажатия кнопки фильтра "Обсуждаемые"
+   * Фильтрация по кнопке "Обсуждаемые"
+   * @return {Array} - массив сортированных фото по обсуждаемости
    */
-  var discussedFilterClickHandler = function () {
+  var filterByDiscussion = function () {
     var sortPhotos = window.photos.slice().sort(function (a, b) {
       return (b.comments.length - a.comments.length);
     });
-    renewElements(sortPhotos, discussedPhotosButton);
+    return sortPhotos;
   };
 
-  popularPhotosButton.addEventListener('mousedown', popularFilterClickHandler);
-  randomPhotosButton.addEventListener('mousedown', randomFilterClickHandler);
-  discussedPhotosButton.addEventListener('mousedown', discussedFilterClickHandler);
-
-  // Прошу проверить код ниже: доступность фильтров
-  var filterPictures = function (evt, handler) {
-    if (window.utils.isEnterPressed(evt)) {
-      evt.preventDefault();
-      handler();
+  var filtersFormClickHandler = function (evt) {
+    if (evt.target.id === 'filter-popular') {
+      renderPhotos(window.photos, evt);
+    } else if (evt.target.id === 'filter-random') {
+      renderPhotos(filterByRandom(), evt);
+    } else if (evt.target.id === 'filter-discussed') {
+      renderPhotos(filterByDiscussion(), evt);
     }
   };
 
-  popularPhotosButton.addEventListener('keydown', function (evt) {
-    filterPictures(evt, popularFilterClickHandler);
-  });
-  randomPhotosButton.addEventListener('keydown', function (evt) {
-    filterPictures(evt, randomFilterClickHandler);
-  });
-  discussedPhotosButton.addEventListener('keydown', function (evt) {
-    filterPictures(evt, discussedFilterClickHandler);
-  });
+  filtersForm.addEventListener('click', filtersFormClickHandler);
 })();

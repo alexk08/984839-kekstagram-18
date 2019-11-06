@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
+  var scaleInput = document.querySelector('.scale__control--value');
   var scaleSmaller = document.querySelector('.scale__control--smaller');
   var scaleBigger = document.querySelector('.scale__control--bigger');
-  var scaleControl = document.querySelector('.scale__control--value');
 
   var Scale = {
     STEP: 25,
@@ -13,31 +13,22 @@
 
   /**
    * Функция расчета изменения масштаба фото
-   * @param {boolean} flag - параметр определяющий какая кнопка нажата. Если +, то true. Eсли -, то false.
+   * @param {Object} evt - объект события
    */
-  var decreaseOrIncreaseScale = function (flag) {
-    var scaleValue = Number(scaleControl.value.slice(0, -1));
-    if (!flag && scaleValue > Scale.MIN) {
+  var scaleButtonClickHandler = function (evt) {
+    var scaleButtonType = evt.target.classList[1].split('--')[1];
+    var scaleValue = parseInt(scaleInput.value, 10);
+    if (scaleButtonType === 'smaller' && scaleValue > Scale.MIN) {
       scaleValue -= Scale.STEP;
-    }
-    if (flag && scaleValue < Scale.MAX) {
+    } else if (scaleButtonType === 'bigger' && scaleValue < Scale.MAX) {
       scaleValue += Scale.STEP;
     }
-    scaleControl.value = scaleValue + '%';
+    scaleInput.value = scaleValue + '%';
     window.form.image.style.transform = 'scale(' + scaleValue * 0.01 + ')';
   };
 
-  scaleBigger.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    var up = true;
-    decreaseOrIncreaseScale(up);
-  });
-
-  scaleSmaller.addEventListener('click', function (evt) {
-    evt.preventDefault();
-    var down = false;
-    decreaseOrIncreaseScale(down);
-  });
+  scaleSmaller.addEventListener('click', scaleButtonClickHandler);
+  scaleBigger.addEventListener('click', scaleButtonClickHandler);
 
   var effects = document.querySelector('.effects');
 

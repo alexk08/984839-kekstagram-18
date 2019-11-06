@@ -49,7 +49,6 @@
     window.form.image.removeAttribute('class');
   });
 
-  // доступность открытия input #upload-file с клавиатуры
   fileUploadControl.addEventListener('keydown', function (evt) {
     if (window.utils.isEnterPressed(evt)) {
       openPopup();

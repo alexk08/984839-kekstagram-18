@@ -3,7 +3,6 @@
 (function () {
   window.bigPicture = {
     render: function (photo) {
-      bigPictureOverlay.classList.remove('hidden');
       bigPictureOverlay.querySelector('.big-picture__img').querySelector('img').src = photo.url;
       bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
       bigPictureOverlay.querySelector('.comments-count').textContent = photo.comments.length;
@@ -49,42 +48,30 @@
   var bigPictureOverlay = document.querySelector('.big-picture');
   var bigPictureCloseButton = bigPictureOverlay.querySelector('.cancel');
 
-  // ВОПРОС: что делать при нажатии на <p class="picture__info">, <span class="picture__comments">8</span>, <span class="picture__likes">28</span> ?
-  var renderBigPictureWithThisSrc = function (src, evt) {
-    evt.preventDefault();
-    document.addEventListener('keydown', documentKeydownEscHandler);
-    document.removeEventListener('keydown', documentKeydownEnterHandler);
-    window.photos.forEach(function (photo) {
-      if (src === photo.url) {
-        window.bigPicture.render(photo);
-      }
-    });
-  };
-
   var openBigPictureOverlay = function (evt) {
-    if (evt.target.classList.contains('picture__img')) {
-      renderBigPictureWithThisSrc(evt.target.getAttribute('src'), evt);
-    } else if (evt.target.classList.contains('picture')) {
-      renderBigPictureWithThisSrc(evt.target.querySelector('img').getAttribute('src'), evt);
+    var link = evt.target.closest('.picture');
+    if (link) {
+      evt.preventDefault();
+      document.addEventListener('keydown', documentKeydownHandler);
+      var img = link.querySelector('img');
+      window.photos.forEach(function (photo) {
+        if (photo.url === img.getAttribute('src')) {
+          window.bigPicture.render(photo);
+        }
+      });
+      bigPictureOverlay.classList.remove('hidden');
     }
   };
 
   var closeBigPictureOverlay = function () {
     bigPictureOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', documentKeydownEscHandler);
+    document.removeEventListener('keydown', documentKeydownHandler);
   };
 
-  var documentKeydownEscHandler = function (evt) {
+  var documentKeydownHandler = function (evt) {
     if (window.utils.isEscPressed(evt)) {
       evt.preventDefault();
       closeBigPictureOverlay();
-    }
-  };
-
-  var documentKeydownEnterHandler = function (evt) {
-    if (window.utils.isEnterPressed(evt)) {
-      evt.preventDefault();
-      openBigPictureOverlay(evt);
     }
   };
 
@@ -95,6 +82,4 @@
   bigPictureCloseButton.addEventListener('click', function () {
     closeBigPictureOverlay();
   });
-
-  document.addEventListener('keydown', documentKeydownEnterHandler);
 })();
