@@ -1,52 +1,44 @@
 'use strict';
 
 (function () {
+  var bigPictureOverlay = document.querySelector('.big-picture');
+  var bigPictureCloseButton = bigPictureOverlay.querySelector('.cancel');
+  var comment = bigPictureOverlay.querySelector('.social__comment');
+  var commentsList = bigPictureOverlay.querySelector('.social__comments');
+  var commentCount = bigPictureOverlay.querySelector('.social__comment-count');
+
+  var Comment = {
+    FIRST: 0,
+    BATCH: 5
+  };
+
   window.bigPicture = {
-    render: function (photo) {
+    renderOverlay: function (photo) {
       bigPictureOverlay.querySelector('.big-picture__img').querySelector('img').src = photo.url;
       bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
       bigPictureOverlay.querySelector('.comments-count').textContent = photo.comments.length;
-
-      var commentsList = bigPictureOverlay.querySelector('.social__comments');
-      var comment = bigPictureOverlay.querySelector('.social__comment');
+      bigPictureOverlay.querySelector('.social__caption').textContent = photo.description;
 
       commentsList.innerHTML = '';
-
-      /**
-       * Функция создание DOM-элемента на базе объекта комментария из загруженных данных из сети
-       * @param {Object} commentFromLoadData - комментарий из загруженных данных
-       * @return {any} DOM-элемент
-       */
-      var generateComment = function (commentFromLoadData) {
-        var commentElement = comment.cloneNode(true);
-        commentElement.querySelector('img').src = commentFromLoadData.avatar;
-        commentElement.querySelector('img').alt = commentFromLoadData.name;
-        commentElement.querySelector('.social__text').textContent = commentFromLoadData.message;
-        return commentElement;
-      };
-
-      /**
-       * Функция отрисовки списка комментариев
-       * @param {Array} arrayOfComments - массив загруженых комментариев
-       */
-      var renderComments = function (arrayOfComments) {
-        var fragment = document.createDocumentFragment();
-        arrayOfComments.forEach(function (element) {
-          fragment.appendChild(generateComment(element));
-        });
-        commentsList.appendChild(fragment);
-      };
-
-      renderComments(photo.comments);
-
-      bigPictureOverlay.querySelector('.social__caption').textContent = photo.description;
-      bigPictureOverlay.querySelector('.social__comment-count').classList.add('visually-hidden');
-      bigPictureOverlay.querySelector('.comments-loader').classList.add('visually-hidden');
+      var firstBatchComments = photo.comments.slice(Comment.FIRST, Comment.BATCH);
+      window.bigPicture.renderComments(firstBatchComments);
+      commentCount.innerHTML = firstBatchComments.length + ' из ' + commentCount.innerHTML.split(' из ')[1];
+    },
+    generateComment: function (commentFromLoadData) {
+      var commentElement = comment.cloneNode(true);
+      commentElement.querySelector('img').src = commentFromLoadData.avatar;
+      commentElement.querySelector('img').alt = commentFromLoadData.name;
+      commentElement.querySelector('.social__text').textContent = commentFromLoadData.message;
+      return commentElement;
+    },
+    renderComments: function (arrayOfComments) {
+      var fragment = document.createDocumentFragment();
+      arrayOfComments.forEach(function (element) {
+        fragment.appendChild(window.bigPicture.generateComment(element));
+      });
+      commentsList.appendChild(fragment);
     }
   };
-
-  var bigPictureOverlay = document.querySelector('.big-picture');
-  var bigPictureCloseButton = bigPictureOverlay.querySelector('.cancel');
 
   var openBigPictureOverlay = function (evt) {
     var link = evt.target.closest('.picture');
@@ -56,7 +48,8 @@
       var img = link.querySelector('img');
       window.photos.forEach(function (photo) {
         if (photo.url === img.getAttribute('src')) {
-          window.bigPicture.render(photo);
+          window.bigPicture.renderOverlay(photo);
+          window.displayedPhoto = photo;
         }
       });
       bigPictureOverlay.classList.remove('hidden');
@@ -82,4 +75,21 @@
   bigPictureCloseButton.addEventListener('click', function () {
     closeBigPictureOverlay();
   });
+
+  var commentsLoadButton = bigPictureOverlay.querySelector('.comments-loader');
+
+  var clickCommentsLoadButtonHandler = function () {
+    var quantityShownComments = bigPictureOverlay.querySelectorAll('.social__comment').length;
+    var nextBatchComments = window.displayedPhoto.comments.slice(quantityShownComments, quantityShownComments + Comment.BATCH);
+    var nextQuantity = window.displayedPhoto.comments.slice(Comment.FIRST, quantityShownComments + Comment.BATCH).length;
+
+    window.bigPicture.renderComments(nextBatchComments);
+    commentCount.innerHTML = nextQuantity + ' из ' + commentCount.innerHTML.split(' из ')[1];
+
+    if (nextQuantity === window.displayedPhoto.comments.length) {
+      commentsLoadButton.classList.add('hidden');
+    }
+  };
+
+  commentsLoadButton.addEventListener('click', clickCommentsLoadButtonHandler);
 })();
