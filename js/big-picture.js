@@ -6,6 +6,7 @@
   var comment = bigPictureOverlay.querySelector('.social__comment');
   var commentsList = bigPictureOverlay.querySelector('.social__comments');
   var commentCount = bigPictureOverlay.querySelector('.social__comment-count');
+  var commentsLoadButton = bigPictureOverlay.querySelector('.comments-loader');
 
   var Comment = {
     FIRST: 0,
@@ -53,6 +54,11 @@
         }
       });
       bigPictureOverlay.classList.remove('hidden');
+      commentsLoadButton.classList.remove('hidden');
+
+      if (window.displayedPhoto.comments.length <= Comment.BATCH) {
+        commentsLoadButton.classList.add('hidden');
+      }
     }
   };
 
@@ -75,8 +81,6 @@
   bigPictureCloseButton.addEventListener('click', function () {
     closeBigPictureOverlay();
   });
-
-  var commentsLoadButton = bigPictureOverlay.querySelector('.comments-loader');
 
   var clickCommentsLoadButtonHandler = function () {
     var quantityShownComments = bigPictureOverlay.querySelectorAll('.social__comment').length;
