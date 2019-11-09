@@ -50,7 +50,7 @@
   });
 
   uploadImageForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(uploadImageForm), uploadHadler, window.errorHandler);
+    window.backend.upload(new FormData(uploadImageForm), uploadHadler, window.errorHandler, 'POST', window.utils.Url.UPLOAD);
     evt.preventDefault();
   });
 

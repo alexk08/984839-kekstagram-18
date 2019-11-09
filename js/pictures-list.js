@@ -34,4 +34,13 @@
       picturesListElement.appendChild(fragment);
     }
   };
+
+  var loadHandler = function (response) {
+    var imageFilters = document.querySelector('.img-filters');
+    imageFilters.classList.remove('img-filters--inactive');
+    window.photos = response;
+    window.picturesList.render(response);
+  };
+
+  window.backend.load(loadHandler, window.errorHandler, 'GET', window.utils.Url.LOAD);
 })();
