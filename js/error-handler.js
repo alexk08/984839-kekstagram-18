@@ -10,6 +10,7 @@
    * Функция вывода сообщения об ошибке загрузки файлов
    */
   window.errorHandler = function () {
+    window.form.close();
     var errorElement = errorTemplate.cloneNode(true);
     mainElement.appendChild(errorElement);
     var errorInner = document.querySelector('.error__inner');

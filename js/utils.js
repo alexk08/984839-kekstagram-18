@@ -29,6 +29,10 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
+    },
+    Url: {
+      LOAD: 'https://js.dump.academy/kekstagram/data',
+      UPLOAD: 'https://js.dump.academy/kekstagram'
     }
   };
 })();
