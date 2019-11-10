@@ -2,7 +2,7 @@
 
 (function () {
   var CODE_SUCCESS = 200;
-  var TIMEOUT_VALUE = 10000;
+  var TIMEOUT_VALUE = 5000;
 
   var createRequest = function (onSuccess, onError, method, url, xhr) {
     xhr.responseType = 'json';
