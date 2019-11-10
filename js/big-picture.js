@@ -39,7 +39,7 @@
       fragment.appendChild(generateComment(element));
     });
     commentsList.appendChild(fragment);
-  }
+  };
 
   var openBigPictureOverlay = function (evt) {
     var link = evt.target.closest('.picture');
