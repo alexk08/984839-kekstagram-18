@@ -17,7 +17,7 @@
     },
     shuffleArray: function (inputArray) {
       var randomArray = [];
-      var randomIndexOfArray = 0;
+      var randomIndexOfArray;
       var secondaryArray = inputArray.slice();
       for (var i = secondaryArray.length - 1; i >= 0; i--) {
         randomIndexOfArray = Math.floor(Math.random() * secondaryArray.length);

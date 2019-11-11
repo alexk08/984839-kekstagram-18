@@ -45,7 +45,7 @@
   var validateHashtags = function () {
     var hashtags = window.hashtagsInput.value.split(' ');
     var message = '';
-    var count = 0;
+    var count;
 
     hashtags.forEach(function (hashtag, index) {
       if (hashtag === '') {

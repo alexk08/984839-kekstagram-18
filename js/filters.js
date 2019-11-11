@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var Index = {
+    BEGIN: 0,
+    END: 10
+  };
+
   var imageSortingForm = document.querySelector('.img-filters__form');
 
   var renderPhotos = function (photos, evt) {
@@ -18,7 +23,7 @@
   };
 
   var sortByRandom = function () {
-    var randomPhotos = window.utils.shuffleArray(window.photos).slice(0, 10);
+    var randomPhotos = window.utils.shuffleArray(window.photos).slice(Index.START, Index.END);
     return randomPhotos;
   };
 

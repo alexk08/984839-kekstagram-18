@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var STRING_AFTER_COUNTER = 1;
   var Comment = {
     FIRST: 0,
     BATCH: 5
@@ -22,7 +23,7 @@
     commentsList.innerHTML = '';
     var firstBatchComments = photo.comments.slice(Comment.FIRST, Comment.BATCH);
     renderComments(firstBatchComments);
-    commentsCount.innerHTML = firstBatchComments.length + ' из ' + commentsCount.innerHTML.split(' из ')[1];
+    commentsCount.innerHTML = firstBatchComments.length + ' из ' + commentsCount.innerHTML.split(' из ')[STRING_AFTER_COUNTER];
   };
 
   var generateComment = function (commentFromLoadData) {
@@ -90,7 +91,7 @@
     var nextQuantity = window.displayedPhoto.comments.slice(Comment.FIRST, quantityShownComments + Comment.BATCH).length;
 
     renderComments(nextBatchComments);
-    commentsCount.innerHTML = nextQuantity + ' из ' + commentsCount.innerHTML.split(' из ')[1];
+    commentsCount.innerHTML = nextQuantity + ' из ' + commentsCount.innerHTML.split(' из ')[STRING_AFTER_COUNTER];
 
     if (nextQuantity === window.displayedPhoto.comments.length) {
       commentsLoadButton.classList.add('hidden');
