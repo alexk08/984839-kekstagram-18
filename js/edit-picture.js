@@ -1,26 +1,23 @@
 'use strict';
 
 (function () {
-  var scaleInput = document.querySelector('.scale__control--value');
-  var scaleSmaller = document.querySelector('.scale__control--smaller');
-  var scaleBigger = document.querySelector('.scale__control--bigger');
-
   var Scale = {
     STEP: 25,
     MIN: 25,
     MAX: 100
   };
 
-  /**
-   * Функция расчета изменения масштаба фото
-   * @param {Object} evt - объект события
-   */
+  var scaleInput = document.querySelector('.scale__control--value');
+  var scaleSmaller = document.querySelector('.scale__control--smaller');
+  var scaleBigger = document.querySelector('.scale__control--bigger');
+
+
   var scaleButtonClickHandler = function (evt) {
-    var scaleButtonType = evt.target.classList[1].split('--')[1];
+    var typeOfButton = evt.target.classList[1].split('--')[1];
     var scaleValue = parseInt(scaleInput.value, 10);
-    if (scaleButtonType === 'smaller' && scaleValue > Scale.MIN) {
+    if (typeOfButton === 'smaller' && scaleValue > Scale.MIN) {
       scaleValue -= Scale.STEP;
-    } else if (scaleButtonType === 'bigger' && scaleValue < Scale.MAX) {
+    } else if (typeOfButton === 'bigger' && scaleValue < Scale.MAX) {
       scaleValue += Scale.STEP;
     }
     scaleInput.value = scaleValue + '%';
@@ -32,12 +29,7 @@
 
   var effects = document.querySelector('.effects');
 
-  /**
-   * Функция обработчик события клика по input [type=radio] с делегированием на элемент fieldset. Происходит выбор эффекта для фотографии и сброс уровня нассыщенности до значения по умолчанию.
-   * Фунция обработчик события. Определяет эффект, накладываемый на изображение.
-   */
-
-  var effectClickHandler = function (evt) {
+  var effectsClickHandler = function (evt) {
     if (evt.target.matches('.effects__radio')) {
       var effectName = evt.target.value;
       window.form.effectLevelField.classList.remove('hidden');
@@ -58,7 +50,7 @@
     }
   };
 
-  effects.addEventListener('click', effectClickHandler);
+  effects.addEventListener('click', effectsClickHandler);
 
   var levelPin = document.querySelector('.effect-level__pin');
   var levelLine = document.querySelector('.effect-level__line');
@@ -98,11 +90,7 @@
     }
   };
 
-  /**
-   * функция обработчик события отпускание клавиши мышки: рассчет уровня насыщенности по положению ползунка
-   */
-
-  levelPin.addEventListener('mousedown', function (evt) {
+  var pinMouseDownHandler = function (evt) {
     evt.preventDefault();
 
     var startCoordsX = evt.clientX;
@@ -125,11 +113,11 @@
     var pinMouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      var coef = levelPin.style.left.slice(0, -1);
+      var effectValue = levelPin.style.left.slice(0, -1);
       var effectName = window.form.image.className.slice(18);
 
-      effectLevel.setAttribute('value', coef);
-      window.form.image.style.filter = filters[effectName].filterName + '(' + (coef / 100 * (filters[effectName].maxValue - filters[effectName].minValue) + filters[effectName].minValue) + filters[effectName].measurementUnit + ')';
+      effectLevel.setAttribute('value', effectValue);
+      window.form.image.style.filter = filters[effectName].filterName + '(' + (effectValue / 100 * (filters[effectName].maxValue - filters[effectName].minValue) + filters[effectName].minValue) + filters[effectName].measurementUnit + ')';
 
       document.removeEventListener('mousemove', pinMouseMoveHandler);
       document.removeEventListener('mouseup', pinMouseUpHandler);
@@ -137,5 +125,7 @@
 
     document.addEventListener('mousemove', pinMouseMoveHandler);
     document.addEventListener('mouseup', pinMouseUpHandler);
-  });
+  };
+
+  levelPin.addEventListener('mousedown', pinMouseDownHandler);
 })();

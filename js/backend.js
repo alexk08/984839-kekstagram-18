@@ -4,21 +4,21 @@
   var CODE_SUCCESS = 200;
   var TIMEOUT_VALUE = 10000;
 
-  var createRequest = function (onSuccess, onError, method, url, xhr) {
+  var createRequest = function (successHandler, errorHandler, method, url, xhr) {
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === CODE_SUCCESS) {
-        onSuccess(xhr.response);
+        successHandler(xhr.response);
       } else {
-        onError();
+        errorHandler();
       }
     });
     xhr.addEventListener('error', function () {
-      onError();
+      errorHandler();
     });
     xhr.addEventListener('timeout', function () {
-      onError();
+      errorHandler();
     });
 
     xhr.timeout = TIMEOUT_VALUE;
@@ -27,14 +27,14 @@
   };
 
   window.backend = {
-    load: function (onSuccess, onError, method, url) {
+    load: function (successHandler, errorHandler, method, url) {
       var xhr = new XMLHttpRequest();
-      createRequest(onSuccess, onError, method, url, xhr);
+      createRequest(successHandler, errorHandler, method, url, xhr);
       xhr.send();
     },
-    upload: function (data, onSuccess, onError, method, url) {
+    upload: function (data, successHandler, errorHandler, method, url) {
       var xhr = new XMLHttpRequest();
-      createRequest(onSuccess, onError, method, url, xhr);
+      createRequest(successHandler, errorHandler, method, url, xhr);
       xhr.send(data);
     }
   };

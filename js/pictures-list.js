@@ -4,40 +4,31 @@
       .content
       .querySelector('.picture');
 
-  /**
-   * Функция создания DOM-элемента на основе JS-объекта
-   * @param {Object} photo -  объект с данными о фото
-   * @return {any} DOM-элемент
-   */
   var generatePicture = function (photo) {
-    var pictureElement = pictureTemplate.cloneNode(true);
+    var picture = pictureTemplate.cloneNode(true);
 
-    pictureElement.querySelector('.picture__img').src = photo.url;
-    pictureElement.querySelector('.picture__likes').textContent = photo.likes;
-    pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
+    picture.querySelector('.picture__img').src = photo.url;
+    picture.querySelector('.picture__likes').textContent = photo.likes;
+    picture.querySelector('.picture__comments').textContent = photo.comments.length;
 
-    return pictureElement;
+    return picture;
   };
 
-  var picturesListElement = document.querySelector('.pictures');
+  var picturesList = document.querySelector('.pictures');
 
-  /**
-   * Функция заполнения списка фотографий DOM-элементами на основе массива данных
-   * @param {Array} photos - массив JS-объектов с данными
-   */
   window.picturesList = {
     render: function (pictures) {
       var fragment = document.createDocumentFragment();
       pictures.forEach(function (picture) {
         fragment.appendChild(generatePicture(picture));
       });
-      picturesListElement.appendChild(fragment);
+      picturesList.appendChild(fragment);
     }
   };
 
   var loadHandler = function (response) {
-    var imageFilters = document.querySelector('.img-filters');
-    imageFilters.classList.remove('img-filters--inactive');
+    var imageSortingBlock = document.querySelector('.img-filters');
+    imageSortingBlock.classList.remove('img-filters--inactive');
     window.photos = response;
     window.picturesList.render(response);
   };
