@@ -33,5 +33,5 @@
     window.picturesList.render(response);
   };
 
-  window.backend.load(loadHandler, window.errorHandler, 'GET', window.utils.Url.LOAD);
+  window.backend.load(loadHandler, window.messages.renderError, 'GET', window.utils.Url.LOAD);
 })();

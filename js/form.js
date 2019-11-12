@@ -78,29 +78,6 @@
 
   uploadImageForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(uploadImageForm), uploadHadler, window.errorHandler, 'POST', window.utils.Url.UPLOAD);
+    window.backend.upload(new FormData(uploadImageForm), window.messages.renderSuccess, window.messages.renderError, 'POST', window.utils.Url.UPLOAD);
   });
-
-  var uploadHadler = function () {
-    window.form.close();
-    var mainContainer = document.querySelector('main');
-    var successTemplate = document.querySelector('#success')
-      .content
-      .querySelector('.success');
-    var successMessage = successTemplate.cloneNode(true);
-    mainContainer.appendChild(successMessage);
-    var successInner = document.querySelector('.success__inner');
-    var successTitle = document.querySelector('.success__title');
-
-    var successMessageCloseHandler = function (evt) {
-      if (window.utils.isEscPressed(evt) || (evt.type === 'click' && evt.target !== successInner && evt.target !== successTitle)) {
-        successMessage.remove();
-        document.removeEventListener('keydown', successMessageCloseHandler);
-        document.removeEventListener('click', successMessageCloseHandler);
-      }
-    };
-
-    document.addEventListener('keydown', successMessageCloseHandler);
-    document.addEventListener('click', successMessageCloseHandler);
-  };
 })();

@@ -35,11 +35,9 @@
   var checkDuplicateOfHashtags = function (tag, arrayOfTags, indexOfArray) {
     tag = tag.toLowerCase();
     for (var i = indexOfArray + 1; i < arrayOfTags.length; i++) {
-      if (tag === arrayOfTags[i].toLowerCase()) {
-        var result = true;
-      }
+      return (tag === arrayOfTags[i].toLowerCase());
     }
-    return result;
+    return false;
   };
 
   var validateHashtags = function () {
