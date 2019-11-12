@@ -1,135 +1,137 @@
 'use strict';
 
 (function () {
-  var scaleInput = document.querySelector('.scale__control--value');
-  var scaleSmaller = document.querySelector('.scale__control--smaller');
-  var scaleBigger = document.querySelector('.scale__control--bigger');
-
+  var CLASS_INDEX = 1;
+  var MODIFIER_INDEX = 1;
+  var DECIMAL = 10;
+  var TRANSFORM_COEFFICIENT = 0.01;
+  var PERСENT = 100;
+  var DEFAULT_EFFECT_VALUE = 100;
+  var TO_MODIFIER = 18;
+  var Index = {
+    BEGIN: 0,
+    END: -1
+  };
+  var Level = {
+    MIN: 0,
+    MAX: 100
+  };
   var Scale = {
     STEP: 25,
     MIN: 25,
     MAX: 100
   };
 
-  /**
-   * Функция расчета изменения масштаба фото
-   * @param {Object} evt - объект события
-   */
+  var scaleInput = document.querySelector('.scale__control--value');
+  var scaleSmaller = document.querySelector('.scale__control--smaller');
+  var scaleBigger = document.querySelector('.scale__control--bigger');
+
+
   var scaleButtonClickHandler = function (evt) {
-    var scaleButtonType = evt.target.classList[1].split('--')[1];
-    var scaleValue = parseInt(scaleInput.value, 10);
-    if (scaleButtonType === 'smaller' && scaleValue > Scale.MIN) {
+    var typeOfButton = evt.target.classList[CLASS_INDEX].split('--')[MODIFIER_INDEX];
+    var scaleValue = parseInt(scaleInput.value, DECIMAL);
+    if (typeOfButton === 'smaller' && scaleValue > Scale.MIN) {
       scaleValue -= Scale.STEP;
-    } else if (scaleButtonType === 'bigger' && scaleValue < Scale.MAX) {
+    } else if (typeOfButton === 'bigger' && scaleValue < Scale.MAX) {
       scaleValue += Scale.STEP;
     }
     scaleInput.value = scaleValue + '%';
-    window.form.image.style.transform = 'scale(' + scaleValue * 0.01 + ')';
+    window.form.image.style.transform = 'scale(' + scaleValue * TRANSFORM_COEFFICIENT + ')';
   };
 
   scaleSmaller.addEventListener('click', scaleButtonClickHandler);
   scaleBigger.addEventListener('click', scaleButtonClickHandler);
 
   var effects = document.querySelector('.effects');
-
-  /**
-   * Функция обработчик события клика по input [type=radio] с делегированием на элемент fieldset. Происходит выбор эффекта для фотографии и сброс уровня нассыщенности до значения по умолчанию.
-   * Фунция обработчик события. Определяет эффект, накладываемый на изображение.
-   */
-
-  var effectClickHandler = function (evt) {
-    if (evt.target.matches('.effects__radio')) {
-      var effectName = evt.target.value;
-      window.form.effectLevelField.classList.remove('hidden');
-      effectLevel.setAttribute('value', 100);
-      window.form.image.style.filter = null;
-      levelPin.style.left = '100%';
-      levelDepth.style.width = '100%';
-      if (window.form.image.classList.length === 0) {
-        window.form.image.classList.add('effects__preview--' + effectName);
-      } else {
-        window.form.image.className = '';
-        window.form.image.classList.add('effects__preview--' + effectName);
-      }
-      if (window.form.image.className === 'effects__preview--none') {
-        window.form.image.removeAttribute('style');
-        window.form.effectLevelField.classList.add('hidden');
-      }
-    }
-  };
-
-  effects.addEventListener('click', effectClickHandler);
-
+  var effectLevel = document.querySelector('.effect-level__value');
   var levelPin = document.querySelector('.effect-level__pin');
   var levelLine = document.querySelector('.effect-level__line');
-  var effectLevel = document.querySelector('.effect-level__value');
   var levelDepth = document.querySelector('.effect-level__depth');
 
-  var filters = {
-    chrome: {
-      filterName: 'grayscale',
-      minValue: 0,
-      maxValue: 1,
-      measurementUnit: ''
-    },
-    sepia: {
-      filterName: 'sepia',
-      minValue: 0,
-      maxValue: 1,
-      measurementUnit: ''
-    },
-    marvin: {
-      filterName: 'invert',
-      minValue: 0,
-      maxValue: 100,
-      measurementUnit: '%'
-    },
-    phobos: {
-      filterName: 'blur',
-      minValue: 0,
-      maxValue: 3,
-      measurementUnit: 'px'
-    },
-    heat: {
-      filterName: 'brightness',
-      minValue: 1,
-      maxValue: 3,
-      measurementUnit: ''
+  var setDefault = function () {
+    effectLevel.setAttribute('value', DEFAULT_EFFECT_VALUE);
+    window.form.image.style.filter = null;
+    levelPin.style.left = DEFAULT_EFFECT_VALUE + '%';
+    levelDepth.style.width = DEFAULT_EFFECT_VALUE + '%';
+    window.form.image.className = '';
+  };
+
+  var effectsClickHandler = function (evt) {
+    if (evt.target.matches('.effects__radio')) {
+      setDefault();
+      var effectName = evt.target.value;
+      window.form.effectLevelField.classList.remove('hidden');
+      window.form.image.className = 'effects__preview--' + effectName;
+      if (window.form.image.className === 'effects__preview--none') {
+        window.form.effectLevelField.classList.add('hidden');
+        window.form.image.style.filter = null;
+      }
     }
   };
 
-  /**
-   * функция обработчик события отпускание клавиши мышки: рассчет уровня насыщенности по положению ползунка
-   */
+  effects.addEventListener('click', effectsClickHandler);
 
-  levelPin.addEventListener('mousedown', function (evt) {
+  var Effect = {
+    CHROME: {
+      filterName: 'grayscale',
+      min: 0,
+      max: 1,
+      unit: ''
+    },
+    SEPIA: {
+      filterName: 'sepia',
+      min: 0,
+      max: 1,
+      unit: ''
+    },
+    MARVIN: {
+      filterName: 'invert',
+      min: 0,
+      max: 100,
+      unit: '%'
+    },
+    PHOBOS: {
+      filterName: 'blur',
+      min: 0,
+      max: 3,
+      unit: 'px'
+    },
+    HEAT: {
+      filterName: 'brightness',
+      min: 1,
+      max: 3,
+      unit: ''
+    }
+  };
+
+  var pinMouseDownHandler = function (evt) {
     evt.preventDefault();
 
-    var startCoordsX = evt.clientX;
+    var startCoords = evt.clientX;
 
     var pinMouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shiftX = startCoordsX - moveEvt.clientX;
-      startCoordsX = moveEvt.clientX;
-      levelPin.style.left = (levelPin.offsetLeft - shiftX) / levelLine.getBoundingClientRect().width * 100 + '%';
+      var shift = startCoords - moveEvt.clientX;
+      startCoords = moveEvt.clientX;
+      levelPin.style.left = Math.round((levelPin.offsetLeft - shift) / levelLine.offsetWidth * PERСENT) + '%';
       levelDepth.style.width = levelPin.style.left;
-      if (levelPin.style.left.slice(0, -1) > 100) {
-        levelPin.style.left = '100%';
+      if (levelPin.style.left.slice(Index.BEGIN, Index.END) > Level.MAX) {
+        levelPin.style.left = Level.MAX + '%';
       }
-      if (levelPin.style.left.slice(0, -1) < 0) {
-        levelPin.style.left = '0%';
+      if (levelPin.style.left.slice(Index.BEGIN, Index.END) < Level.MIN) {
+        levelPin.style.left = Level.MIN + '%';
       }
+
+      var effectValue = levelPin.style.left.slice(Index.BEGIN, Index.END);
+      var effectModifier = window.form.image.className.slice(TO_MODIFIER);
+
+      effectLevel.setAttribute('value', effectValue);
+      window.form.image.style.filter = Effect[effectModifier.toUpperCase()].filterName + '(' + (effectValue / PERСENT * (Effect[effectModifier.toUpperCase()].max - Effect[effectModifier.toUpperCase()].min) + Effect[effectModifier.toUpperCase()].min) + Effect[effectModifier.toUpperCase()].unit + ')';
     };
 
     var pinMouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-
-      var coef = levelPin.style.left.slice(0, -1);
-      var effectName = window.form.image.className.slice(18);
-
-      effectLevel.setAttribute('value', coef);
-      window.form.image.style.filter = filters[effectName].filterName + '(' + (coef / 100 * (filters[effectName].maxValue - filters[effectName].minValue) + filters[effectName].minValue) + filters[effectName].measurementUnit + ')';
 
       document.removeEventListener('mousemove', pinMouseMoveHandler);
       document.removeEventListener('mouseup', pinMouseUpHandler);
@@ -137,5 +139,7 @@
 
     document.addEventListener('mousemove', pinMouseMoveHandler);
     document.addEventListener('mouseup', pinMouseUpHandler);
-  });
+  };
+
+  levelPin.addEventListener('mousedown', pinMouseDownHandler);
 })();
