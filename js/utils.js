@@ -1,21 +1,23 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-  var DEBOUNCE_INTERVAL = 500; // ms
+  var DEBOUNCE_INTERVAL = 500;
+  var Keycode = {
+    ESC: 27,
+    ENTER: 13
+  };
   var lastTimeout;
 
   window.utils = {
     isEnterPressed: function (evt) {
-      return evt.keyCode === ENTER_KEYCODE;
+      return evt.keyCode === Keycode.ENTER;
     },
     isEscPressed: function (evt) {
-      return evt.keyCode === ESC_KEYCODE;
+      return evt.keyCode === Keycode.ESC;
     },
     shuffleArray: function (inputArray) {
       var randomArray = [];
-      var randomIndexOfArray = 0;
+      var randomIndexOfArray;
       var secondaryArray = inputArray.slice();
       for (var i = secondaryArray.length - 1; i >= 0; i--) {
         randomIndexOfArray = Math.floor(Math.random() * secondaryArray.length);

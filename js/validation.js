@@ -2,17 +2,18 @@
 
 (function () {
   var Hashtag = {
-    MAX_QTY: 5,
+    MAX_QUANTITY: 5,
     MAX_LENGTH: 20,
     FIRST_SYMBOL: '#',
     MIN_LENGTH: 2,
-    BAR_MAX_QTY: 1,
+    BAR_MAX_QUANTITY: 1,
     FROM: 1
   };
-  var hashtagsInput = document.querySelector('.text__hashtags');
+
+  window.hashtagsInput = document.querySelector('.text__hashtags');
 
   var checkMaxQuantityOfHashtags = function (quantityOfHashtags) {
-    return (quantityOfHashtags > Hashtag.MAX_QTY);
+    return (quantityOfHashtags > Hashtag.MAX_QUANTITY);
   };
 
   var checkForFirstSymbol = function (tag) {
@@ -28,29 +29,21 @@
   };
 
   var checkSeparationOfHashtags = function (tag) {
-    return (tag.indexOf(Hashtag.FIRST_SYMBOL, Hashtag.FROM) >= Hashtag.BAR_MAX_QTY);
+    return (tag.indexOf(Hashtag.FIRST_SYMBOL, Hashtag.FROM) >= Hashtag.BAR_MAX_QUANTITY);
   };
 
   var checkDuplicateOfHashtags = function (tag, arrayOfTags, indexOfArray) {
     tag = tag.toLowerCase();
     for (var i = indexOfArray + 1; i < arrayOfTags.length; i++) {
-      if (tag === arrayOfTags[i].toLowerCase()) {
-        var result = true;
-      }
+      return (tag === arrayOfTags[i].toLowerCase());
     }
-    return result;
+    return false;
   };
 
-  /**
-   * Функция обработчик валидации хэштегов
-   * @param {Object} evt - объект события
-   */
-  var hashtagsValidationHandler = function (evt) {
-    evt.preventDefault();
-
-    var hashtags = hashtagsInput.value.split(' ');
+  var validateHashtags = function () {
+    var hashtags = window.hashtagsInput.value.split(' ');
     var message = '';
-    var count = 0;
+    var count;
 
     hashtags.forEach(function (hashtag, index) {
       if (hashtag === '') {
@@ -88,8 +81,15 @@
         return;
       }
     });
-    hashtagsInput.setCustomValidity(message);
+    window.hashtagsInput.setCustomValidity(message);
+    if (message !== '') {
+      window.hashtagsInput.style.boxShadow = '0 0 0 3px red';
+    } else {
+      window.hashtagsInput.removeAttribute('style');
+    }
   };
 
-  hashtagsInput.addEventListener('change', hashtagsValidationHandler);
+  window.hashtagsInput.addEventListener('change', function () {
+    validateHashtags();
+  });
 })();
