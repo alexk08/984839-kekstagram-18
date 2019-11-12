@@ -71,32 +71,32 @@
 
   effects.addEventListener('click', effectsClickHandler);
 
-  var effect = {
-    chrome: {
+  var Effect = {
+    CHROME: {
       filterName: 'grayscale',
       min: 0,
       max: 1,
       unit: ''
     },
-    sepia: {
+    SEPIA: {
       filterName: 'sepia',
       min: 0,
       max: 1,
       unit: ''
     },
-    marvin: {
+    MARVIN: {
       filterName: 'invert',
       min: 0,
       max: 100,
       unit: '%'
     },
-    phobos: {
+    PHOBOS: {
       filterName: 'blur',
       min: 0,
       max: 3,
       unit: 'px'
     },
-    heat: {
+    HEAT: {
       filterName: 'brightness',
       min: 1,
       max: 3,
@@ -127,7 +127,7 @@
       var effectModifier = window.form.image.className.slice(TO_MODIFIER);
 
       effectLevel.setAttribute('value', effectValue);
-      window.form.image.style.filter = effect[effectModifier].filterName + '(' + (effectValue / PERСENT * (effect[effectModifier].max - effect[effectModifier].min) + effect[effectModifier].min) + effect[effectModifier].unit + ')';
+      window.form.image.style.filter = Effect[effectModifier.toUpperCase()].filterName + '(' + (effectValue / PERСENT * (Effect[effectModifier.toUpperCase()].max - Effect[effectModifier.toUpperCase()].min) + Effect[effectModifier.toUpperCase()].min) + Effect[effectModifier.toUpperCase()].unit + ')';
     };
 
     var pinMouseUpHandler = function (upEvt) {
