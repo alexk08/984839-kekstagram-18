@@ -11,9 +11,9 @@
         .querySelector('.error');
       var errorMessage = errorTemplate.cloneNode(true);
       mainContainer.appendChild(errorMessage);
-      var errorInner = document.querySelector('.error__inner');
-      var errorTitle = document.querySelector('.error__title');
-      var errorButtons = document.querySelector('.error__buttons');
+      var errorInner = errorMessage.querySelector('.error__inner');
+      var errorTitle = errorMessage.querySelector('.error__title');
+      var errorButtons = errorMessage.querySelector('.error__buttons');
 
       var closeErrorMessage = function () {
         errorMessage.remove();
@@ -43,8 +43,8 @@
         .querySelector('.success');
       var successMessage = successTemplate.cloneNode(true);
       mainContainer.appendChild(successMessage);
-      var successInner = document.querySelector('.success__inner');
-      var successTitle = document.querySelector('.success__title');
+      var successInner = successMessage.querySelector('.success__inner');
+      var successTitle = successMessage.querySelector('.success__title');
 
       var closeSuccessMessage = function () {
         successMessage.remove();
