@@ -33,8 +33,8 @@
       lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
     },
     Url: {
-      LOAD: 'https://javascript.pages.academy/kekstagram/data',
-      UPLOAD: 'https://javascript.pages.academy/kekstagram'
+      LOAD: 'https://22.javascript.pages.academy/kekstagram/data',
+      UPLOAD: 'https://22.javascript.pages.academy/kekstagram'
     }
   };
 })();
